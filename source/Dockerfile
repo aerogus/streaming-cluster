@@ -14,4 +14,13 @@ RUN apt-get update && \
     apt-get install -y ffmpeg && \
     rm -rf /var/lib/apt/lists/*
 
-RUN ffmpeg -re -f lavfi -i smptebars -crf $CRF -s $RESOLUTION -r $FRAMERATE -f flv rtmp://$INGEST_IP:1935/ingest/mire
+CMD ffmpeg \
+    -re \
+    -f lavfi \
+    -i smptebars \
+    -crf $CRF \
+    -s $RESOLUTION \
+    -r $FRAMERATE \
+    -f flv \
+    rtmp://$INGEST_IP:1935/ingest/mire
+
