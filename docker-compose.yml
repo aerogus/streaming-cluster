@@ -1,0 +1,197 @@
+##
+# Cluster de broadcast vidéo
+##
+
+version: '3.9'
+
+services:
+
+  # 2 sources vidéos
+  # mires générées par ffmpeg
+
+  source1:
+    build:
+      context: ./source
+      args:
+        INGEST_IP: 'ingest1'
+    container_name: source1
+    restart: unless-stopped
+    #environment:
+    #  - INGEST_IP=ingest1 # destination
+    networks:
+      - backend
+    depends_on:
+      - ingest1
+
+  source2:
+    build: ./source
+    build:
+      context: ./source
+      args:
+        INGEST_IP: 'ingest2'
+    container_name: source2
+    restart: unless-stopped
+    #environment:
+    #  - INGEST_IP=ingest2 # destination
+    networks:
+      - backend
+    depends_on:
+      - ingest2
+
+
+  # 2 serveurs d'ingest d'un flux RTMP
+  # encodent et alimentent les broadcastX ?
+
+  ingest1:
+    build: ./ingest
+    container_name: ingest1
+    restart: unless-stopped
+    #ports:
+    #  - 1935:1935
+    networks:
+      - backend
+
+  ingest2:
+    build: ./ingest
+    container_name: ingest2
+    restart: always
+    #ports:
+    #  - 1936:1935
+    networks:
+      - backend
+
+
+  # 2 serveurs de base de données
+  # pour la persistance des comptes + chat + Q/R + QCM
+
+  db1:
+    build: ./db
+    container_name: db1
+    restart: unless-stopped
+    networks:
+      - backend
+
+  db2:
+    build: ./db
+    container_name: db2
+    restart: unless-stopped
+    networks:
+      - backend
+
+  # 4 serveurs de broadcast d'un flux HLS
+  # les fichiers sont générés à l'avance par les ingest?
+
+  broadcast1:
+    build: ./broadcast
+    container_name: broadcast1
+    restart: unless-stopped
+    #ports:
+    #  - 8080:80
+    #  - 4430:443
+    networks:
+      - backend
+      - frontend
+    environment:
+      - DB_MASTER=db1
+      - DB_SLAVE=db2
+    depends_on:
+      - db1
+      - db2
+
+  broadcast2:
+    build: ./broadcast
+    container_name: broadcast2
+    restart: unless-stopped
+    #ports:
+    #  - 8081:80
+    #  - 4431:443
+    networks:
+      - backend
+      - frontend
+    environment:
+      - DB_MASTER=db1
+      - DB_SLAVE=db2
+    depends_on:
+      - db1
+      - db2
+
+  broadcast3:
+    build: ./broadcast
+    container_name: broadcast3
+    restart: unless-stopped
+    #ports:
+    #  - 8082:80
+    #  - 4432:443
+    networks:
+      - backend
+      - frontend
+    environment:
+      - DB_MASTER=db1
+      - DB_SLAVE=db2
+    depends_on:
+      - db1
+      - db2
+
+  broadcast4:
+    build: ./broadcast
+    container_name: broadcast4
+    restart: unless-stopped
+    #ports:
+    #  - 8083:80
+    #  - 4433:443
+    networks:
+      - backend
+      - frontend
+    environment:
+      - DB_MASTER=db1
+      - DB_SLAVE=db2
+    depends_on:
+      - db1
+      - db2
+
+
+   # 2 serveurs de loadbalancing Haproxy + Certif SSL ?
+
+  lb1:
+    build: ./lb
+    container_name: lb1
+    restart: unless-stopped
+    ports:
+      - 8080:80
+      - 8443:443
+    networks:
+      - frontend
+    environment: # liste des filers nginx dispo
+      - BROADCAST_1_IP=broadcast1
+      - BROADCAST_2_IP=broadcast2
+      - BROADCAST_3_IP=broadcast3
+      - BROADCAST_4_IP=broadcast4
+    depends_on:
+      - broadcast1
+      - broadcast2
+      - broadcast3
+      - broadcast4
+
+  lb1:
+    build: ./lb
+    container_name: lb2
+    restart: unless-stopped
+    ports:
+      - 8081:80
+      - 8444:443
+    networks:
+      - frontend
+    environment: # liste des files nginx dispo
+      - BROADCAST_1_IP=broadcast1
+      - BROADCAST_2_IP=broadcast2
+      - BROADCAST_3_IP=broadcast3
+      - BROADCAST_4_IP=broadcast4
+    depends_on:
+      - broadcast1
+      - broadcast2
+      - broadcast3
+      - broadcast4
+
+networks:
+  frontend:
+  backend:

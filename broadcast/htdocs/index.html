@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Player</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="/lib/bootstrap@4.6.0/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+  <div style="max-width:960px;margin:0 auto">
+    <div class="fluid-video-player ratio-16-9">
+      <video id="video" style="background:url(/img/mire-tv.webp) no-repeat center center / cover" controls></video>
+    </div>
+  </div>
+  <script>
+  var asv = {"videoSrc":"https:\/\/live.adhocmusic.com\/hls\/onair.m3u8"}
+  </script>
+  <script src="/lib/bootstrap@4.6.0/bootstrap.bundle.min.js"></script>
+  <script src="/lib/hls.js@1.0.0/hls.min.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
