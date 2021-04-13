@@ -77,8 +77,7 @@ services:
   #  networks:
   #    backend:
 
-  # 4 serveurs de broadcast d'un flux HLS
-  # les fichiers sont générés à l'avance par les ingest?
+  # 4 serveurs web broadcast des flux HLS + webapp
 
   broadcast1:
     build: ./broadcast
