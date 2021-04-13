@@ -12,7 +12,7 @@ ENV NGINX_RTMP_MODULE_VERSION 1.2.1
 
 # Install dependencies
 RUN apt-get update && \
-    apt-get install -y ca-certificates openssl libssl-dev && \
+    apt-get install -y ffmpeg ca-certificates openssl libssl-dev && \
     rm -rf /var/lib/apt/lists/*
 
 # Download and decompress Nginx
@@ -27,6 +27,7 @@ RUN mkdir -p /tmp/build/nginx-rtmp-module && \
     wget -O nginx-rtmp-module-${NGINX_RTMP_MODULE_VERSION}.tar.gz https://github.com/arut/nginx-rtmp-module/archive/v${NGINX_RTMP_MODULE_VERSION}.tar.gz && \
     tar -zxf nginx-rtmp-module-${NGINX_RTMP_MODULE_VERSION}.tar.gz && \
     cd nginx-rtmp-module-${NGINX_RTMP_MODULE_VERSION}
+# https://github.com/sergey-dryabzhinsky/nginx-rtmp-module.git plus récent ?
 
 # Compilation nginx
 RUN cd /tmp/build/nginx/${NGINX_VERSION} && \
@@ -54,9 +55,10 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
 
 # Set up config file
 COPY nginx.conf /etc/nginx/nginx.conf
+COPY stat.xsl /etc/nginx/stat.xsl
 
 # répertoires de stockage des hls et flv d'enregistrement
-RUN mkdir -p /data/hls /data/records
+RUN mkdir -p /data/hls /data/dash /data/records
 
-EXPOSE 1935
+EXPOSE 1935 80
 CMD ["nginx", "-g", "daemon off;"]

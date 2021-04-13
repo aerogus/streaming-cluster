@@ -1,13 +1,16 @@
-FROM debian:buster
+FROM buildpack-deps:buster
 
 LABEL maintainer="Guillaume Seznec <guillaume@seznec.fr>"
 
 # Host ou ip de destination
 ARG INGEST_IP
 
-ENV RESOLUTION 1280x720
+ENV RESOLUTION 1920x1080
 ENV FRAMERATE 25
 ENV CRF 18
+
+ENV APP ingest
+ENV NAME mire
 
 # Install dependencies
 RUN apt-get update && \
@@ -16,11 +19,10 @@ RUN apt-get update && \
 
 CMD ffmpeg \
     -re \
-    -f lavfi \
-    -i smptebars \
+    -f lavfi -i "smptebars=rate=$FRAMERATE:size=$RESOLUTION" \
+    -f lavfi -i "sine=frequency=1000" \
+    -c:v libx264 -b:v 4096k \
+    -c:a aac -b:a 128k \
     -crf $CRF \
-    -s $RESOLUTION \
-    -r $FRAMERATE \
     -f flv \
-    rtmp://$INGEST_IP:1935/ingest/mire
-
+    rtmp://$INGEST_IP:1935/$APP/$NAME

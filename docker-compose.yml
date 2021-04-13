@@ -4,10 +4,18 @@
 
 version: '3.9'
 
+networks:
+  frontend:
+  backend:
+
+volumes:
+  data1:
+  data2:
+
 services:
 
-  # 2 sources vidéos
-  # mires générées par ffmpeg
+  # 2 sources
+  # mires audio+vidéo générées par ffmpeg
 
   source1:
     build: ./source
@@ -36,6 +44,10 @@ services:
     restart: always
     networks:
       backend:
+    ports:
+      - 801:80
+    volumes:
+      - data1:/data
 
   ingest2:
     build: ./ingest
@@ -43,23 +55,27 @@ services:
     restart: always
     networks:
       backend:
+    ports:
+      - 802:80
+    volumes:
+      - data2:/data
 
   # 2 serveurs de base de données
   # pour la persistance des comptes + chat + Q/R + QCM
 
-  db1:
-    build: ./db
-    container_name: db1
-    restart: always
-    networks:
-      backend:
+  #db1:
+  #  build: ./db
+  #  container_name: db1
+  #  restart: always
+  #  networks:
+  #    backend:
 
-  db2:
-    build: ./db
-    container_name: db2
-    restart: always
-    networks:
-      backend:
+  #db2:
+  #  build: ./db
+  #  container_name: db2
+  #  restart: always
+  #  networks:
+  #    backend:
 
   # 4 serveurs de broadcast d'un flux HLS
   # les fichiers sont générés à l'avance par les ingest?
@@ -74,6 +90,9 @@ services:
     environment:
       - DB_MASTER=db1
       - DB_SLAVE=db2
+    volumes:
+      - data1:/data1:ro
+      - data2:/data2:ro
 
   broadcast2:
     build: ./broadcast
@@ -85,6 +104,9 @@ services:
     environment:
       - DB_MASTER=db1
       - DB_SLAVE=db2
+    volumes:
+      - data1:/data1:ro
+      - data2:/data2:ro
 
   broadcast3:
     build: ./broadcast
@@ -96,6 +118,9 @@ services:
     environment:
       - DB_MASTER=db1
       - DB_SLAVE=db2
+    volumes:
+      - data1:/data1:ro
+      - data2:/data2:ro
 
   broadcast4:
     build: ./broadcast
@@ -107,6 +132,9 @@ services:
     environment:
       - DB_MASTER=db1
       - DB_SLAVE=db2
+    volumes:
+      - data1:/data1:ro
+      - data2:/data2:ro
 
    # 2 serveurs de loadbalancing Haproxy + Certif SSL ?
 
@@ -115,6 +143,8 @@ services:
     container_name: lb1
     restart: always
     ports:
+      - 80:80
+      - 443:443
       - 8080:80
       - 8443:443
     networks:
@@ -129,7 +159,3 @@ services:
       - 8444:443
     networks:
       frontend:
-
-networks:
-  frontend:
-  backend:

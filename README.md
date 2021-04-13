@@ -36,3 +36,17 @@ Lancer le daemon Docker puis l'ensemble des containers
 docker compose up
 ```
 
+/etc/hosts du host Docker
+
+```
+127.0.0.1 streaming-cluster.test
+127.0.0.1 broadcast1.streaming-cluster.test
+127.0.0.1 broadcast2.streaming-cluster.test
+127.0.0.1 broadcast3.streaming-cluster.test
+127.0.0.1 broadcast4.streaming-cluster.test
+127.0.0.1 ingest1.streaming-cluster.test
+127.0.0.1 ingest2.streaming-cluster.test
+127.0.0.1 db1.streaming-cluster.test
+127.0.0.1 db2.streaming-cluster.test
+```
+

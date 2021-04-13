@@ -43,9 +43,10 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
     ln -sf /dev/stderr /var/log/nginx/error.log
 
 # Set up config file
-#COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx.conf /etc/nginx/nginx.conf
 
-COPY htdocs /usr/share/nginx/html
+RUN mkdir -p /data/htdocs
+COPY ./htdocs/ /data/htdocs/
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
