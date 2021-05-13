@@ -4,9 +4,7 @@ LABEL maintainer="Guillaume Seznec <guillaume@seznec.fr>"
 
 # cf. https://github.com/nginx/nginx
 # version "stable"
-#ENV NGINX_VERSION nginx-1.18.0
-# version "mainline"
-ENV NGINX_VERSION nginx-1.19.9
+ENV NGINX_VERSION nginx-1.20.0
 
 # Install dependencies
 RUN apt-get update && \

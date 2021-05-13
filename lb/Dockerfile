@@ -1,4 +1,4 @@
-FROM haproxy:2.3.9
+FROM haproxy:2.3.10
 
 LABEL maintainer="Guillaume Seznec <guillaume@seznec.fr>"
 

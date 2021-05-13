@@ -8,6 +8,7 @@ ARG INGEST_IP
 ENV RESOLUTION 1280x720
 ENV FRAMERATE 25
 ENV CRF 18
+ENV INGEST_PORT 1935
 
 # Install dependencies
 RUN apt-get update && \
@@ -22,5 +23,5 @@ CMD ffmpeg \
     -s $RESOLUTION \
     -r $FRAMERATE \
     -f flv \
-    rtmp://$INGEST_IP:1935/ingest/mire
+    rtmp://$INGEST_IP:$INGEST_PORT/ingest/mire
 
