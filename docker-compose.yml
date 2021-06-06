@@ -62,20 +62,37 @@ services:
 
   # 2 serveurs de base de données
   # pour la persistance des comptes + chat + Q/R + QCM
+  # + 1 panel de gestion (adminer)
 
   #db1:
-  #  build: ./db
+  #  #build: ./db
+  #  image: mariadb
+  #  environmnent:
+  #    MYSQL_ROOT_PASSWORD: changeme
   #  container_name: db1
   #  restart: always
   #  networks:
   #    backend:
 
   #db2:
-  #  build: ./db
+  #  #build: ./db
+  #  image: mariadb
+  #  environment:
+  #    MYSQL_ROOT_PASSWORD: changeme
   #  container_name: db2
   #  restart: always
   #  networks:
   #    backend:
+
+  #dbadmin:
+  #  image: adminer
+  #  restart: always
+  #  networks:
+  #    frontend:
+  #    backend:
+  #  ports:
+  #    - 8082:8080
+
 
   # 4 serveurs web broadcast des flux HLS + webapp
 
