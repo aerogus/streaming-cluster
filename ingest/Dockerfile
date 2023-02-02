@@ -4,11 +4,11 @@ LABEL maintainer="Guillaume Seznec <guillaume@seznec.fr>"
 
 # cf. https://github.com/nginx/nginx
 # version "stable"
-#ENV NGINX_VERSION nginx-1.18.0
+ENV NGINX_VERSION nginx-1.23.3
 # version "mainline"
-ENV NGINX_VERSION nginx-1.19.9
+#ENV NGINX_VERSION nginx-1.19.9
 # cf. https://github.com/arut/nginx-rtmp-module
-ENV NGINX_RTMP_MODULE_VERSION 1.2.1
+ENV NGINX_RTMP_MODULE_VERSION 1.2.2
 
 # Install dependencies
 RUN apt-get update && \

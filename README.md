@@ -29,6 +29,7 @@ Sous MacOS, avec `homebrew` :
 ```
 brew install docker
 brew install docker --cask
+brew install docker-compose
 ```
 
 Lancez le démon `docker` (ou clic sur l'icone dans Applications)

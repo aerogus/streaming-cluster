@@ -4,7 +4,7 @@ LABEL maintainer="Guillaume Seznec <guillaume@seznec.fr>"
 
 # cf. https://github.com/nginx/nginx
 # version "stable"
-ENV NGINX_VERSION nginx-1.20.0
+ENV NGINX_VERSION nginx-1.23.3
 
 # Install dependencies
 RUN apt-get update && \
